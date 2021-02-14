@@ -66,4 +66,4 @@ with open('password.txt', 'r') as passwordtxt:
             print(f"Password for {username} is {cracked}")
             print(f"{cracked} has {getEntropy(cracked)} bits of entropy")
             timetaken= (time.time() - startTime)
-            print(f"Password  took {str(datetime.timedelta(seconds=timetaken))} hrs:min:sec to crack\n")
+            print(f"Password took {str(datetime.timedelta(seconds=timetaken))} hrs:min:sec to crack\n")
