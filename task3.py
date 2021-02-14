@@ -6,19 +6,21 @@ import math
 
 def attemptCrack(salt, realHash):
     cracked = False
-    characterList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_-+={[}]\|<,>.?/:;\"'~`"
     while(not cracked):
         print("working...")
-        dictionary = open("/usr/share/dict/words", "r")
-        for word in dictionary:
-            #remove trailing white space
-            word = word.rstrip()
-            key = hashlib.pbkdf2_hmac("sha256", word.encode(), salt, 100000)
-            print(key)
-            print(realHash)
-            if (key == realHash):
-                cracked = True
-                return word
+        for x in range(1,3):
+            dictionary = open("/usr/share/dict/words", "r")
+            print(f"checking words of length {x}...")
+            for word in dictionary:
+                # remove trailing white space
+                word = word.rstrip()
+                if len(word) == x:
+                    key = hashlib.pbkdf2_hmac("sha256", word.encode(), salt, 100000)
+                    #print(key)
+                    #print(realHash)
+                    if (key == realHash):
+                        cracked = True
+                        return word
         print("Password not in dictionary.")
         return "still a mystery"
         break
@@ -66,4 +68,4 @@ with open('password.txt', 'r') as passwordtxt:
             print(f"Password for {username} is {cracked}")
             print(f"{cracked} has {getEntropy(cracked)} bits of entropy")
             timetaken= (time.time() - startTime)
-            print(f"Password  took {str(datetime.timedelta(seconds=timetaken))} hrs:min:sec to crack\n")
+            print(f"Password took {str(datetime.timedelta(seconds=timetaken))} hrs:min:sec to crack\n")
