@@ -1,5 +1,4 @@
 import datetime
-import itertools
 import hashlib
 import time
 import math
@@ -16,8 +15,6 @@ def attemptCrack(salt, realHash):
                 word = word.rstrip()
                 if len(word) == x:
                     key = hashlib.pbkdf2_hmac("sha256", word.encode(), salt, 100000)
-                    #print(key)
-                    #print(realHash)
                     if (key == realHash):
                         cracked = True
                         return word
@@ -35,20 +32,14 @@ def getEntropy(input):
     b = len(input)
     a=0;
     if(hasSymbols):
-        #The presence of symbols means I assume all ascii chars are possibilities
         a=95
-    #all cases below, we know hasSymbols is False
     elif(hasLowercase and not hasUppercase and not hasNumbers) or (hasUppercase and not hasLowercase and not hasNumbers):
-        #one case, no symbols, no numbers
         a=26
     elif hasUppercase and hasLowercase and not hasNumbers:
-        #both cases, no numbers, no symbols
         a=52
     elif (hasUppercase and not hasLowercase and hasNumbers) or (hasLowercase and not hasUppercase and hasNumbers):
-        #one case plus numbers, no symbols
         a=36
     elif(hasUppercase and hasLowercase and hasNumbers and not hasSymbols):
-        #both cases and numbers, no symbols
         a=62
     return math.log2(a**b)
 
