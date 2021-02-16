@@ -1,3 +1,4 @@
+# CSCI373 HW1 Task 2: brute force 'password.txt' made in task1
 import datetime
 import itertools
 import hashlib
@@ -5,11 +6,13 @@ import time
 import math
 
 def attemptCrack(salt, realHash):
+    """receives salt and full hash as input and attempts to brute force by encrypting all character combinations with given hash and comparing resulting hash against the real one"""
     cracked = False
     characterList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_-+={[}]\|<,>.?/:;\"'~`"
     while(not cracked):
         print("working...")
         for x in range(0, 16):
+            #bounded this at 16 chars as this was an educational exercise, but could go longer.
             guess = itertools.product(characterList, repeat=x)
             for pin in guess:
                 pinready=''.join(pin)
@@ -21,9 +24,10 @@ def attemptCrack(salt, realHash):
         print("Stopped at all combinations of 16 characters without successfully finding password")
         return "still a mystery"
         break
-        #Portions of brute force code taken from: https://gist.github.com/DCSantu2000/a18af862e4ed9a3c56f238aacdd7ba02
+        #Portions of this segment of code were taken from: https://gist.github.com/DCSantu2000/a18af862e4ed9a3c56f238aacdd7ba02
 
 def getEntropy(input):
+    """Calculates and returns the level of entropy for the input"""
     hasUppercase = any(char.isupper() for char in input)
     hasLowercase = any(char.islower() for char in input)
     hasNumbers = any(char.isdigit() for char in input)
@@ -35,7 +39,7 @@ def getEntropy(input):
     if(hasSymbols):
         #The presence of symbols means I assume all ascii chars are possibilities
         a=95
-    #all cases below, we know hasSymbols is False
+    #For all cases below, we know hasSymbols is False
     elif(hasLowercase and not hasUppercase and not hasNumbers) or (hasUppercase and not hasLowercase and not hasNumbers):
         #one case, no symbols, no numbers
         a=26
@@ -48,6 +52,9 @@ def getEntropy(input):
     elif(hasUppercase and hasLowercase and hasNumbers and not hasSymbols):
         #both cases and numbers, no symbols
         a=62
+    else:
+        a=10
+        #numbers only
     return math.log2(a**b)
 
 passwordtxt = open('password.txt', 'r')
