@@ -7,7 +7,7 @@ def attemptCrack(salt, realHash):
     cracked = False
     while(not cracked):
         print("working...")
-        for x in range(1,3):
+        for x in range(1,16):
             dictionary = open("/usr/share/dict/words", "r")
             print(f"checking words of length {x}...")
             for word in dictionary:
@@ -18,6 +18,8 @@ def attemptCrack(salt, realHash):
                     if (key == realHash):
                         cracked = True
                         return word
+        #dictionary didn't work, so now begin character substitutions
+
         print("Password not in dictionary.")
         return "still a mystery"
         break
